@@ -1,6 +1,6 @@
 {
-    "name": "maks3w/php-library-skeleton",
-    "description": "PHP Library skeleton",
+    "name": "benhap/pb-evaluator",
+    "description": "Logical expression evaluation library",
     "keywords": [
     ],
     "license": "BSD-2-Clause",
@@ -15,12 +15,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Vendor\\Component\\": "src/"
+            "Pbit\\Evaluator\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vendor\\ComponentTest\\": "test/"
+            "Pbit\\EvaluatorTest\\": "test/"
         }
     },
     "scripts": {
