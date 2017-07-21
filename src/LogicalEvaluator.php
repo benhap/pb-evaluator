@@ -47,9 +47,9 @@ class LogicalEvaluator {
         $w = "";
 
         while (($ch = $this->readChar()) !== null) {
-     
+
             if (preg_match("/^[a-zA-Z0-9\.]+$/", $ch)) {
-             
+
                 $w .= $ch;
             } else {
                 $this->pos--;
@@ -101,7 +101,7 @@ class LogicalEvaluator {
         }
 
 
-        
+
 
         return $w;
     }
@@ -176,7 +176,7 @@ class LogicalEvaluator {
                 $res = new Token(Token::OPERATOR_OR);
             } else {
                 $res = new Token(Token::VARIABLE_NAME, $w);
-             //   echo $w;
+                //   echo $w;
             }
         }
 
@@ -229,7 +229,18 @@ class LogicalEvaluator {
             $this->expect($quoteType);
 
             if ($operator->type === Token::OPERATOR_EQUAL) {
-                $eval = isset($this->variableValues[$token->value]) ? $this->variableValues[$token->value] == $value : false;
+                $eval = false;
+
+                if (isset($this->variableValues[$token->value])) {
+                    
+                    $realValue = $this->variableValues[$token->value];
+
+                    if (is_array($realValue)) {
+                        $eval = in_array($value, $realValue);
+                    } else {
+                        $eval = ($realValue == $value);
+                    }
+                }
             } elseif ($operator->type === Token::OPERATOR_NOT_EQUAL) {
                 $eval = isset($this->variableValues[$token->value]) ? $this->variableValues[$token->value] != $value : false;
             } elseif ($operator->type === Token::OPERATOR_GT) {
