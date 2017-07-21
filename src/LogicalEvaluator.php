@@ -34,7 +34,7 @@ class LogicalEvaluator {
     }
 
     public function skipSpaces() {
-        while ($ch = $this->readChar()) {
+        while (($ch = $this->readChar()) !== null) {
             if ($ch != "\0" && $ch != "\t" && $ch != "\n" && $ch != "\x0B" && $ch != "\r" && $ch != " ") {
                 $this->pos--;
                 break;
@@ -73,7 +73,7 @@ class LogicalEvaluator {
         $specialChars = ["\\", $separator];
 
 
-        while ($ch = $this->readChar()) {
+        while (($ch = $this->readChar()) !== null) {
             if ($ch !== $separator || $escapeNext) {
 
                 if (array_search($ch, $specialChars) !== false) {
@@ -110,7 +110,7 @@ class LogicalEvaluator {
 
         $o = "";
 
-        while ($ch = $this->readChar()) {
+        while (($ch = $this->readChar()) !== null) {
             if (array_search($ch, ["<", ">", "!", "=", "~"])) {
                 $o .= $ch;
             } else {
@@ -129,7 +129,7 @@ class LogicalEvaluator {
         $this->skipSpaces();
         $ch = $this->readChar(false);
 
-        if (!$ch) {
+        if ($ch === null) {
             $res = new Token(Token::EOF);
         } elseif ($ch == "(") {
             $this->pos++;
