@@ -234,7 +234,7 @@ class LogicalEvaluator {
             } else {
                 // variable token
                 $variableToken = $this->readToken();
-                if ($variableToken->type !== \Token::VARIABLE_NAME) {
+                if ($variableToken->type !== Token::VARIABLE_NAME) {
                     throw new \Exception("Expected \Token::VARIABLE_NAME, got: " . $variableToken->type);
                 }
 
