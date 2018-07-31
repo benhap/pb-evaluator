@@ -240,7 +240,7 @@ class LogicalEvaluator {
 
                 if (!isset($this->variableValues[$variableToken->value])) {
                     //throw new \Exception('Variable ' . $variableToken->value . ' is not defined!');
-                    $value = 'unknown';
+                    $value = 'undefined';
                 } else {
                     $value = $this->variableValues[$variableToken->value];
                 }
