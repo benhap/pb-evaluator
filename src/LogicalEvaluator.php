@@ -223,16 +223,34 @@ class LogicalEvaluator {
         if ($token->type === Token::VARIABLE_NAME) {
 
             $operator = $this->readToken();
-            $quoteType = $this->expect([Token::SINGLE_QUOTE, Token::DOUBLE_QUOTE]);
-            $value = $this->value($quoteType == Token::SINGLE_QUOTE ? "'" : '"');
-            // same quote type as open quote
-            $this->expect($quoteType);
+
+            $t = $this->readToken(true);
+
+            if ($t->type === Token::SINGLE_QUOTE || $t->type === Token::DOUBLE_QUOTE) {
+                $quoteType = $this->expect([Token::SINGLE_QUOTE, Token::DOUBLE_QUOTE]);
+                $value = $this->value($quoteType == Token::SINGLE_QUOTE ? "'" : '"');
+                // same quote type as open quote
+                $this->expect($quoteType);
+            } else {
+                // variable token
+                $variableToken = $this->readToken();
+                if ($variableToken->type !== \Token::VARIABLE_NAME) {
+                    throw new \Exception("Expected \Token::VARIABLE_NAME, got: " . $variableToken->type);
+                }
+
+                if (!isset($this->variableValues[$variableToken->value])) {
+                    throw new \Exception('Variable ' . $variableToken->value . ' is not defined!');
+                }
+
+                $value = $this->variableValues[$variableToken->value];
+            }
+
 
             if ($operator->type === Token::OPERATOR_EQUAL) {
                 $eval = false;
 
                 if (isset($this->variableValues[$token->value])) {
-                    
+
                     $realValue = $this->variableValues[$token->value];
 
                     if (is_array($realValue)) {
