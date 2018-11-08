@@ -101,8 +101,6 @@ class LogicalEvaluator {
         }
 
 
-
-
         return $w;
     }
 
@@ -190,7 +188,7 @@ class LogicalEvaluator {
             $this->pos = $origPos;
         }
 
-        if(!$res) {
+        if (!$res) {
             throw new \Exception('Unknown character: ' . $ch);
         }
 
@@ -283,9 +281,9 @@ class LogicalEvaluator {
             } elseif ($operator->type === Token::OPERATOR_RLIKE) {
                 $eval = isset($this->variableValues[$token->value]) ? (preg_match("#{$value}#", $this->variableValues[$token->value]) ? true : false) : false;
             } elseif ($operator->type === Token::OPERATOR_CONTAIN) {
-                $eval = isset($this->variableValues[$token->value]) ? strpos($this->variableValues[$token->value],  $value) !== false : false;
+                $eval = isset($this->variableValues[$token->value]) ? strpos($this->variableValues[$token->value], $value) !== false : false;
             } elseif ($operator->type === Token::OPERATOR_NOT_CONTAIN) {
-                $eval = isset($this->variableValues[$token->value]) ? strpos($this->variableValues[$token->value],  $value) === false : false;
+                $eval = isset($this->variableValues[$token->value]) ? strpos($this->variableValues[$token->value], $value) === false : false;
             } else {
                 throw new \Exception("Expected an operator, got {$operator->type}");
             }
@@ -330,6 +328,27 @@ class LogicalEvaluator {
 
     protected function value($separator) {
         return $this->readVariableValue($separator);
+    }
+
+    public function getUsage() {
+        $usage = <<<STR
+Use following syntax: (var1 = "25" or var2 = '35') AND x ~ 'regexmatch'. 
+
+Operators: <, >, =, <>, !=, >=, <=, ~ (regex match, e.g. a ~ "test" means variable a contains a word "test"), ^ (variable contains), !^ (variable does not contain)
+
+variables can be also compared: var1 ^ var2 (var1 contains var2 as a substring)  
+
+>>> DO NOT FORGET THE QUOTES!!! - both single and double are allowed <<<
+
+Examples:
+test !^ 'python'  // variable test does not contain the word "python"
+test ^ 'python'  // variable test contains the word "python"
+test ~ '^abc' and test != 'abcd' // variable var starts with 'abc' but is not equal to 'abcd'
+(test > 25 or test < 10) or (test >= 15 and test <= 16) 
+
+STR;
+
+        return $usage;
     }
 
 }
