@@ -28,6 +28,9 @@ class Token {
     const DOUBLE_QUOTE = 'double_quote';
     
     const OPERATOR_RLIKE = 'operator_rlike';
+
+    const OPERATOR_CONTAIN = 'operator_contain';
+    const OPERATOR_NOT_CONTAIN = 'operator_not_contain';
     
     
     

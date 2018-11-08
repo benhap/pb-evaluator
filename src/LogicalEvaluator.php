@@ -111,7 +111,8 @@ class LogicalEvaluator {
         $o = "";
 
         while (($ch = $this->readChar()) !== null) {
-            if (array_search($ch, ["<", ">", "!", "=", "~"])) {
+            if (array_search($ch, ["<", ">", "!", "=", "~", "^"])) {
+
                 $o .= $ch;
             } else {
                 $this->pos--;
@@ -163,6 +164,10 @@ class LogicalEvaluator {
                 $res = new Token(Token::OPERATOR_NOT_EQUAL);
             } elseif ($operator === "~") {
                 $res = new Token(Token::OPERATOR_RLIKE);
+            } elseif ($operator === "^") {
+                $res = new Token(Token::OPERATOR_CONTAIN);
+            } elseif ($operator === "!^") {
+                $res = new Token(Token::OPERATOR_NOT_CONTAIN);
             } else {
                 throw new \Exception("Wrong operator: {$operator}");
             }
@@ -272,6 +277,10 @@ class LogicalEvaluator {
                 $eval = isset($this->variableValues[$token->value]) ? $this->variableValues[$token->value] <= $value : false;
             } elseif ($operator->type === Token::OPERATOR_RLIKE) {
                 $eval = isset($this->variableValues[$token->value]) ? (preg_match("#{$value}#", $this->variableValues[$token->value]) ? true : false) : false;
+            } elseif ($operator->type === Token::OPERATOR_CONTAIN) {
+                $eval = isset($this->variableValues[$token->value]) ? strpos($this->variableValues[$token->value],  $value) !== false : false;
+            } elseif ($operator->type === Token::OPERATOR_NOT_CONTAIN) {
+                $eval = isset($this->variableValues[$token->value]) ? strpos($this->variableValues[$token->value],  $value) === false : false;
             } else {
                 throw new \Exception("Expected an operator, got {$operator->type}");
             }
