@@ -129,6 +129,7 @@ class LogicalEvaluator {
 
         $this->skipSpaces();
         $ch = $this->readChar(false);
+        $res = null;
 
         if ($ch === null) {
             $res = new Token(Token::EOF);
@@ -144,7 +145,7 @@ class LogicalEvaluator {
         } elseif ($ch == '"') {
             $this->pos++;
             $res = new Token(Token::DOUBLE_QUOTE);
-        } elseif ($ch == "=" || $ch == ">" || $ch == "<" || $ch == "!" || $ch == "~") {
+        } elseif ($ch == "=" || $ch == ">" || $ch == "<" || $ch == "!" || $ch == "~" || $ch == '^') {
 
             $operator = $this->readOperator();
 
@@ -187,6 +188,10 @@ class LogicalEvaluator {
 
         if ($preview) {
             $this->pos = $origPos;
+        }
+
+        if(!$res) {
+            throw new \Exception('Unknown character: ' . $ch);
         }
 
         return $res;
