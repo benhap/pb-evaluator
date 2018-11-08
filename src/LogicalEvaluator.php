@@ -330,7 +330,7 @@ class LogicalEvaluator {
         return $this->readVariableValue($separator);
     }
 
-    public function getUsage() {
+    public static function getUsage() {
         $usage = <<<STR
 Use following syntax: (var1 = "25" or var2 = '35') AND x ~ 'regexmatch'. 
 
